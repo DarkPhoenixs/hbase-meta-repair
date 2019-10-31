@@ -18,6 +18,10 @@
 
 # hbase-meta-repair
 
+[![Organization](https://img.shields.io/badge/org-%20DarkPhoenixs-yellow.svg)](http://www.darkphoenixs.org)
+[![GitHub release](https://img.shields.io/github/release/DarkPhoenixs/hbase-meta-repair.svg)](https://github.com/DarkPhoenixs/hbase-meta-repair/releases)
+[![License](https://img.shields.io/badge/license-%20Apache%202-4EB1BA.svg)](https://www.apache.org/licenses/LICENSE-2.0.html)
+
 Repair hbase meta data for [Apache HBase&trade;](https://hbase.apache.org) 
 versions before 2.0.3 and 2.1.1 (hbase versions without HBCK2).
 
