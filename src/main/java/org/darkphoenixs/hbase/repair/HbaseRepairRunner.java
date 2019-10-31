@@ -1,4 +1,4 @@
-package com.faw.hbase.hbaserepair;
+package org.darkphoenixs.hbase.repair;
 
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
