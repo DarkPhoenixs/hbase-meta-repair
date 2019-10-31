@@ -16,7 +16,7 @@
  limitations under the License.
 -->
 
-# hbase-repair
+# hbase-meta-repair
 
 Repair hbase meta data for [Apache HBase&trade;](https://hbase.apache.org) 
 versions before 2.0.3 and 2.1.1 (hbase versions without HBCK2).
@@ -36,6 +36,8 @@ hdfs.root.dir=hdfs://nameservice/hbase
 [core-site.xml](src/main/resources/core-site.xml) Using profiles on Hadoop clusters.
                                                   
 [hdfs-site.xml](src/main/resources/hdfs-site.xml) Using profiles on Hadoop clusters.
+
+[pom.xml](pom.xml) hange `hbase.version` to your version.
 
 ## Building repair
 
