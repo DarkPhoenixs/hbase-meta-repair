@@ -41,7 +41,7 @@ hdfs.root.dir=hdfs://nameservice/hbase
                                                   
 [hdfs-site.xml](src/main/resources/hdfs-site.xml) Using profiles on Hadoop clusters.
 
-[pom.xml](pom.xml) hange `hbase.version` to your version.
+[pom.xml](pom.xml) Change `hbase.version` to your version.
 
 ## Building repair
 
