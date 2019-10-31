@@ -27,21 +27,20 @@ versions before 2.0.3 and 2.1.1 (hbase versions without HBCK2).
 
 ## Configuration
 
-[application.properties](src/main/resources/application.properties)
+* [application.properties](src/main/resources/application.properties)
+    ```properties
+    # hbase zk host:port
+    zookeeper.address=host:port,host:port,host:port
+    # hbase zk root
+    zookeeper.nodeParent=/hbase
+    # hbase hdfs root
+    hdfs.root.dir=hdfs://nameservice/hbase
+    ```
+* [core-site.xml](src/main/resources/core-site.xml) Using profiles on Hadoop clusters.
+                             
+* [hdfs-site.xml](src/main/resources/hdfs-site.xml) Using profiles on Hadoop clusters.
 
-```properties
-# hbase zk host:port
-zookeeper.address=host:port,host:port,host:port
-# hbase zk root
-zookeeper.nodeParent=/hbase
-# hbase hdfs root
-hdfs.root.dir=hdfs://nameservice/hbase
-```
-[core-site.xml](src/main/resources/core-site.xml) Using profiles on Hadoop clusters.
-                                                  
-[hdfs-site.xml](src/main/resources/hdfs-site.xml) Using profiles on Hadoop clusters.
-
-[pom.xml](pom.xml) Change `hbase.version` to your version.
+* [pom.xml](pom.xml) Change `hbase.version` to your version.
 
 ## Building repair
 
