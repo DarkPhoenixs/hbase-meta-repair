@@ -44,14 +44,12 @@ versions before 2.0.3 and 2.1.1 (hbase versions without HBCK2).
 
 ## Building repair
 
-Run:
 ```bash
 $ mvn install
 ```
 
 ## Running repair
 
-Run:
 ```bash
 $ java -jar -Drepair.tableName={tableName} hbase-repair-{version}.jar
 ```
