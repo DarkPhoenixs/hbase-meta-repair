@@ -36,9 +36,9 @@ versions before 2.0.3 and 2.1.1 (hbase versions without HBCK2).
     # hbase hdfs root
     hdfs.root.dir=hdfs://nameservice/hbase
     ```
-* [core-site.xml](src/main/resources/core-site.xml) Using profiles on Hadoop clusters.
+* [core-site.xml](src/main/resources/core-site.xml) Using profiles on Hadoop clusters(copy from your cluster).
                              
-* [hdfs-site.xml](src/main/resources/hdfs-site.xml) Using profiles on Hadoop clusters.
+* [hdfs-site.xml](src/main/resources/hdfs-site.xml) Using profiles on Hadoop clusters(copy from your cluster).
 
 * [pom.xml](pom.xml) Change `hbase.version` to your version.
 
