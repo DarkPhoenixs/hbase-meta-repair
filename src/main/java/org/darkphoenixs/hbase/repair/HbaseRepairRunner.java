@@ -58,7 +58,7 @@ public class HbaseRepairRunner implements ApplicationRunner {
         configuration.set(HBASE_ROOTDIR, hdfsRootDir);
         configuration.set(HBASE_ZNODE_PARENT, zookeeperNodeParent);
 
-        Set<String> metaRegions = getMetaRegions(configuration, repairTableName);
+        Map<String,byte[]> metaRegions = getMetaRegions(configuration, repairTableName);
 
         log.warn(JSON.toJSONString(metaRegions));
 
@@ -68,7 +68,12 @@ public class HbaseRepairRunner implements ApplicationRunner {
 
         log.warn(JSON.toJSONString(hdfsRegionNames));
 
-        metaRegions.removeAll(hdfsRegionNames);
+        for(String hdfsRegionName: hdfsRegionNames) {
+
+            if(metaRegions.containsKey(hdfsRegionName)) {
+                metaRegions.remove(hdfsRegionName);
+            }
+        }
 
         log.warn("Delete hbase Metadata:" + JSON.toJSONString(metaRegions));
 
@@ -84,6 +89,12 @@ public class HbaseRepairRunner implements ApplicationRunner {
 
         int rsLength = regionServers.length;
         int i = 0;
+
+        for (String regionName : metaRegions.keySet()) {
+
+            table.delete(new Delete(metaRegions.get(regionName)));
+        }
+
         for (String regionName : hdfsRegionNames) {
 
             String sn = regionServers[i % rsLength].getServerName();
@@ -99,15 +110,10 @@ public class HbaseRepairRunner implements ApplicationRunner {
             i++;
         }
 
-        for (String regionName : metaRegions) {
-
-            table.delete(new Delete(Bytes.toBytes(regionName)));
-        }
-
         conn.close();
     }
 
-    public Set<String> getMetaRegions(Configuration conf, String tableName) throws Exception {
+    public Map<String,byte[]> getMetaRegions(Configuration conf, String tableName) throws Exception {
 
         Connection conn = ConnectionFactory.createConnection(conf);
         Table table = conn.getTable(TableName.valueOf(TABLE));
@@ -117,12 +123,13 @@ public class HbaseRepairRunner implements ApplicationRunner {
         Scan scan = new Scan();
         scan.setFilter(filter);
 
-        Set<String> metaRegions = new HashSet<>();
+        Map<String,byte[]> metaRegions = new HashMap<>();
 
         Iterator<Result> iterator = table.getScanner(scan).iterator();
         while (iterator.hasNext()) {
             Result result = iterator.next();
-            metaRegions.add(Bytes.toString(result.getRow()));
+            //使用toStringBinary，和hdfs regioninfo中的编码保持一致。
+            metaRegions.put(Bytes.toStringBinary(result.getRow()),result.getRow());
         }
 
         conn.close();
@@ -133,8 +140,19 @@ public class HbaseRepairRunner implements ApplicationRunner {
 
     public Map<String, RegionInfo> getHdfsRegions(Configuration conf, String tablePath) throws Exception {
 
+
+
+        //处理带scheme的表名入hbase:meta,将表名分成两部分
+        //默认的scheme为default
+        String scheme = "default";
+        String tableName = tablePath;
+        if(tablePath.indexOf(':')>=0){
+            scheme = tablePath.substring(0,tablePath.indexOf(':'));
+            tableName = tablePath.substring(tablePath.indexOf(':') + 1);
+        }
+
         FileSystem fs = FileSystem.get(conf);
-        Path path = new Path(hdfsRootDir + "/data/default/" + tablePath + "/");
+        Path path = new Path(hdfsRootDir + "/data/"+scheme+"/" + tableName + "/");
 
         Map<String, RegionInfo> hdfsRegions = new HashMap<>();
 
@@ -158,6 +176,7 @@ public class HbaseRepairRunner implements ApplicationRunner {
             }
 
             RegionInfo hri = HRegionFileSystem.loadRegionInfoFileContent(fs, status.getPath());
+
             hdfsRegions.put(hri.getRegionNameAsString(), hri);
 
         }
