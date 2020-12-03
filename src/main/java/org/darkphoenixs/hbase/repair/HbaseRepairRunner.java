@@ -70,9 +70,8 @@ public class HbaseRepairRunner implements ApplicationRunner {
 
         for(String hdfsRegionName: hdfsRegionNames) {
 
-            if(metaRegions.containsKey(hdfsRegionName)) {
                 metaRegions.remove(hdfsRegionName);
-            }
+            
         }
 
         log.warn("Delete hbase Metadata:" + JSON.toJSONString(metaRegions));
